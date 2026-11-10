@@ -83,6 +83,16 @@ service cloud.firestore {
       allow delete: if true;
     }
 
+    // Study Resources & Digital Library (Dynamic Sources)
+    match /study_resources/{resourceId} {
+      allow read: if true;
+      allow create, update: if isAdmin() || (
+        isValidString(request.resource.data.title, 2, 300) &&
+        request.resource.data.description is string
+      );
+      allow delete: if true;
+    }
+
     // Admin Action Logs (Append-only for tamper prevention)
     match /admin_logs/{logId} {
       allow read: if isAdmin();

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ActivePage } from '../types';
-import { BookOpen, Calendar, Send, Bell, GraduationCap, Home, Sparkles, Plus, Calculator, Timer, Download, PackageCheck } from 'lucide-react';
+import { Sparkles, Calculator, Timer, Download, PackageCheck } from 'lucide-react';
 
 interface HeaderProps {
   activePage: ActivePage;
@@ -117,17 +117,6 @@ export const Header: React.FC<HeaderProps> = ({
               <span>تثبيت التطبيق 🎓</span>
             </button>
 
-            {/* Telegram Bot Button */}
-            <a
-              href="http://t.me/Daleelak_AlJamaei_bot"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="الانتقال إلى بوت التلجرام الرسمي"
-              className="h-9 sm:h-10 px-2.5 sm:px-3.5 rounded-xl bg-[#071A3D] hover:bg-[#16958E] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md transition-all active:scale-95 whitespace-nowrap"
-            >
-              <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4 rotate-180 text-[#BCEBFF]" />
-              <span className="hidden sm:inline">بوت التلجرام</span>
-            </a>
 
             {/* Download Zip Dropdown (Desktop Only) */}
             <div className="relative hidden md:block">

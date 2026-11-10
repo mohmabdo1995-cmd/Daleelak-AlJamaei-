@@ -19,7 +19,7 @@ import {
 } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 import { Subject, Lecture, StudyResource, ArticleItem, VideoItem, CollegeInfoData, TickerItem } from '../types';
-import { COLLEGE_INFO, SUBJECTS_DATA, DEFAULT_ARTICLES, DEFAULT_VIDEOS } from '../data/academicContent';
+import { COLLEGE_INFO, SUBJECTS_DATA, DEFAULT_ARTICLES, DEFAULT_VIDEOS, STUDY_RESOURCES } from '../data/academicContent';
 
 import { getAuth } from 'firebase/auth';
 
@@ -709,7 +709,132 @@ export class FirebaseService {
     await this.addAdminLog('استعادة شريط الأخبار الافتراضي', 'تم استرجاع الأخبار النموذجية لشريط الأخبار');
   }
 
-  // 12. Full Backup JSON Export & Import
+  // 12. Dynamic Study Resources & Digital Library (مصادر الدراسة والمكتبة الرقمية)
+  static subscribeStudyResources(callback: (resources: StudyResource[]) => void): () => void {
+    const colRef = collection(db, 'study_resources');
+    return onSnapshot(colRef, (snapshot) => {
+      if (!snapshot.empty) {
+        const resources: StudyResource[] = [];
+        snapshot.forEach(docSnap => {
+          const data = docSnap.data();
+          resources.push({
+            id: docSnap.id,
+            title: data.title || '',
+            description: data.description || '',
+            link: data.link || data.url || '',
+            url: data.url || data.link || '',
+            subjectId: data.subjectId || 'general',
+            subjectTag: data.subjectTag || data.subjectId || '',
+            category: data.category || 'book',
+            icon: data.icon || 'BookOpen',
+            isExternal: data.isExternal !== false,
+            isActive: data.isActive !== false,
+            order: data.order ?? 0,
+            createdAt: data.createdAt || new Date().toISOString(),
+            updatedAt: data.updatedAt || new Date().toISOString()
+          } as StudyResource);
+        });
+        resources.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+        callback(resources);
+      } else {
+        // If empty in Firestore, populate default study resources
+        STUDY_RESOURCES.forEach(async (res, idx) => {
+          try {
+            const docRef = doc(db, 'study_resources', res.id);
+            await setDoc(docRef, {
+              title: res.title,
+              description: res.description,
+              link: res.link,
+              url: res.link,
+              subjectId: res.subjectId,
+              subjectTag: res.subjectId,
+              category: res.category,
+              icon: res.icon || 'BookOpen',
+              isExternal: res.isExternal !== false,
+              isActive: true,
+              order: idx + 1,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+            });
+          } catch (e) {
+            console.warn('Error seeding study resource:', e);
+          }
+        });
+        callback(STUDY_RESOURCES);
+      }
+    }, (err) => {
+      console.warn('Study resources snapshot error, fallback to defaults:', err);
+      callback(STUDY_RESOURCES);
+    });
+  }
+
+  static async addStudyResource(item: Omit<StudyResource, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+    const colRef = collection(db, 'study_resources');
+    const now = new Date().toISOString();
+    const docRef = await addDoc(colRef, {
+      title: item.title.trim(),
+      description: item.description.trim(),
+      link: item.link || item.url || '',
+      url: item.url || item.link || '',
+      subjectId: item.subjectId || 'general',
+      subjectTag: item.subjectTag || item.subjectId || '',
+      category: item.category || 'book',
+      icon: item.icon || 'BookOpen',
+      isExternal: item.isExternal !== false,
+      isActive: item.isActive !== false,
+      order: item.order ?? 0,
+      createdAt: now,
+      updatedAt: now
+    });
+    await this.addAdminLog('إضافة مصدر دراسي جديد', `اسم المصدر: ${item.title}`);
+    return docRef.id;
+  }
+
+  static async updateStudyResource(id: string, partial: Partial<StudyResource>): Promise<void> {
+    const docRef = doc(db, 'study_resources', id);
+    const updatePayload: any = {
+      ...partial,
+      updatedAt: new Date().toISOString()
+    };
+    if (partial.url && !partial.link) updatePayload.link = partial.url;
+    if (partial.link && !partial.url) updatePayload.url = partial.link;
+    if (partial.subjectId && !partial.subjectTag) updatePayload.subjectTag = partial.subjectId;
+    if (partial.subjectTag && !partial.subjectId) updatePayload.subjectId = partial.subjectTag;
+
+    await updateDoc(docRef, updatePayload);
+    await this.addAdminLog('تحديث مصدر دراسي', `معرف المصدر: ${id} (${partial.title || ''})`);
+  }
+
+  static async deleteStudyResource(id: string): Promise<void> {
+    const docRef = doc(db, 'study_resources', id);
+    await deleteDoc(docRef);
+    await this.addAdminLog('حذف مصدر دراسي', `معرف المصدر: ${id}`);
+  }
+
+  static async seedDefaultStudyResources(): Promise<void> {
+    for (let idx = 0; idx < STUDY_RESOURCES.length; idx++) {
+      const res = STUDY_RESOURCES[idx];
+      const docRef = doc(db, 'study_resources', res.id);
+      await setDoc(docRef, {
+        title: res.title,
+        description: res.description,
+        link: res.link,
+        url: res.link,
+        subjectId: res.subjectId,
+        subjectTag: res.subjectId,
+        category: res.category,
+        icon: res.icon || 'BookOpen',
+        isExternal: true,
+        isActive: true,
+        order: idx + 1,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+    }
+    await this.addAdminLog('استعادة المصادر النموذجية', 'تم استرجاع المصادر الدراسية الافتراضية');
+  }
+
+  // 13. Full Backup JSON Export & Import
   static async exportFullData(): Promise<string> {
     const docRef = doc(db, 'site_config', SITE_CONFIG_DOC_ID);
     const snap = await getDoc(docRef);
@@ -730,6 +855,9 @@ export class FirebaseService {
     const tickSnap = await getDocs(collection(db, 'ticker_items'));
     const tickData = tickSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
+    const resSnap = await getDocs(collection(db, 'study_resources'));
+    const resData = resSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
     const backupPayload = {
       exportedAt: new Date().toISOString(),
       siteConfig: siteConfigData,
@@ -737,7 +865,8 @@ export class FirebaseService {
       media: mediaData,
       articles: artData,
       videos: vidData,
-      tickerItems: tickData
+      tickerItems: tickData,
+      studyResources: resData
     };
 
     return JSON.stringify(backupPayload, null, 2);
@@ -751,7 +880,8 @@ export class FirebaseService {
       videos: 0,
       tickerItems: 0,
       announcements: 0,
-      media: 0
+      media: 0,
+      studyResources: 0
     };
 
     let parsed: any;
@@ -834,9 +964,14 @@ export class FirebaseService {
       await restoreCollection('media', parsed.media, 'media');
     }
 
+    // 7. Restore Study Resources
+    if (Array.isArray(parsed.studyResources)) {
+      await restoreCollection('study_resources', parsed.studyResources, 'studyResources');
+    }
+
     await this.addAdminLog(
       'استعادة نسخة احتياطية شاملة',
-      `تم استرجاع: ${stats.articles} مقال، ${stats.videos} فيديو، ${stats.tickerItems} خبر، إعدادات: ${stats.siteConfig}`
+      `تم استرجاع: ${stats.articles} مقال، ${stats.videos} فيديو، ${stats.studyResources} مصدر دراسي، ${stats.tickerItems} خبر، إعدادات: ${stats.siteConfig}`
     );
 
     return {

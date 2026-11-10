@@ -19,13 +19,20 @@ export const SubjectsSection: React.FC<SubjectsSectionProps> = ({ onBack, initia
   useEffect(() => {
     const unsubscribe = FirebaseService.subscribeSubjects((data) => {
       setSubjectsList(data);
-      if (initialSelectedId && !selectedSubject) {
-        const found = data.find(s => s.id === initialSelectedId);
+      if (initialSelectedId) {
+        const found = data.find(s => s.id.toLowerCase() === initialSelectedId.toLowerCase());
         if (found) setSelectedSubject(found);
       }
     });
     return () => unsubscribe();
   }, [initialSelectedId]);
+
+  useEffect(() => {
+    if (initialSelectedId && subjectsList.length > 0) {
+      const found = subjectsList.find(s => s.id.toLowerCase() === initialSelectedId.toLowerCase());
+      if (found) setSelectedSubject(found);
+    }
+  }, [initialSelectedId, subjectsList]);
 
   const filteredSubjects = subjectsList.filter(s => 
     s.nameAr.includes(searchQuery) || 

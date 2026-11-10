@@ -85,12 +85,18 @@ export interface Lecture {
 export interface StudyResource {
   id: string;
   title: string;
-  subjectId: SubjectId | 'general';
-  category: 'telegram' | 'book' | 'video' | 'notes' | 'summary';
+  subjectId: SubjectId | 'general' | string;
+  subjectTag?: string;
+  category: 'telegram' | 'book' | 'video' | 'notes' | 'summary' | string;
   description: string;
   link: string;
+  url?: string;
   isExternal?: boolean;
   icon?: string;
+  order?: number;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface GpaCourse {

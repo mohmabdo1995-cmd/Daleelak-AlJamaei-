@@ -17,6 +17,7 @@ import { ArticleItem, VideoItem, CollegeInfoData, Subject, TickerItem } from '..
 import { COLLEGE_INFO, SUBJECTS_DATA } from '../../data/academicContent';
 import { Modal } from '../common/Modal';
 import { GoogleDriveStorageManager } from './GoogleDriveStorageManager';
+import { StudyResourcesManager } from './StudyResourcesManager';
 
 interface AdminDashboardLayoutProps {
   onCloseAdmin: () => void;
@@ -25,6 +26,7 @@ interface AdminDashboardLayoutProps {
 type AdminTab =
   | 'overview'
   | 'ticker'
+  | 'study_resources'
   | 'articles'
   | 'college_sections'
   | 'videos'
@@ -57,6 +59,7 @@ export const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({ onCl
   });
   const [subjects, setSubjects] = useState<Subject[]>(SUBJECTS_DATA);
   const [tickerItems, setTickerItems] = useState<TickerItem[]>([]);
+  const [studyResourcesCount, setStudyResourcesCount] = useState<number>(0);
 
   const [isSaving, setIsSaving] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -110,6 +113,7 @@ export const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({ onCl
     const unsubscribeTicker = FirebaseService.subscribeTicker((data) => setTickerItems(data));
     const unsubscribeCollege = FirebaseService.subscribeCollegeInfo((data) => setCollegeInfo(data));
     const unsubscribeSubj = FirebaseService.subscribeSubjects((data) => setSubjects(data));
+    const unsubscribeResources = FirebaseService.subscribeStudyResources((data) => setStudyResourcesCount(data.length));
 
     return () => {
       unsubscribeConfig();
@@ -121,6 +125,7 @@ export const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({ onCl
       unsubscribeTicker();
       unsubscribeCollege();
       unsubscribeSubj();
+      unsubscribeResources();
     };
   }, []);
 
@@ -520,6 +525,27 @@ export const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({ onCl
             </button>
 
             <button
+              onClick={() => setActiveTab('study_resources')}
+              className={`w-full text-right px-3.5 py-2.5 rounded-2xl text-xs font-bold flex items-center justify-between transition-all ${
+                activeTab === 'study_resources'
+                  ? 'bg-[#071A3D] text-white shadow-md'
+                  : 'text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <Layers className="w-4 h-4 text-[#16958E]" />
+                <span>مصادر الدراسة والمكتبة 📖</span>
+              </div>
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                activeTab === 'study_resources'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-[#16958E]/15 text-[#16958E]'
+              }`}>
+                {studyResourcesCount}
+              </span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('articles')}
               className={`w-full text-right px-3.5 py-2.5 rounded-2xl text-xs font-bold flex items-center justify-between transition-all ${
                 activeTab === 'articles'
@@ -658,10 +684,14 @@ export const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({ onCl
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
                 <div className="p-4 rounded-2xl bg-blue-50 border border-blue-100 text-blue-900">
                   <p className="text-xs font-bold text-blue-600">إجمالي المقالات</p>
                   <p className="text-2xl font-black font-mono mt-1">{articles.length}</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-teal-50 border border-teal-100 text-teal-900 cursor-pointer hover:bg-teal-100/70 transition-colors" onClick={() => setActiveTab('study_resources')}>
+                  <p className="text-xs font-bold text-[#16958E]">مصادر الدراسة والمكتبة 📖</p>
+                  <p className="text-2xl font-black font-mono mt-1">{studyResourcesCount}</p>
                 </div>
                 <div className="p-4 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-900">
                   <p className="text-xs font-bold text-indigo-600">الفيديوهات المرئية</p>
@@ -680,6 +710,14 @@ export const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({ onCl
               <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200">
                 <h3 className="text-sm font-bold text-slate-800 font-tajawal mb-2">اختصارات الإدارة السريعة:</h3>
                 <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={() => setActiveTab('study_resources')}
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#071A3D] to-[#16958E] hover:from-[#0a2558] hover:to-[#1ba8a0] text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
+                  >
+                    <BookOpen className="w-4 h-4 text-[#BCEBFF]" />
+                    <span>إدارة مصادر الدراسة والمكتبة الرقمية ✦</span>
+                  </button>
+
                   <button
                     onClick={() => {
                       setEditingArticle({ title: '', content: '', category: 'عام', status: 'published' });
@@ -1019,6 +1057,16 @@ export const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({ onCl
                 )}
               </div>
             </div>
+          )}
+
+          {/* TAB: STUDY RESOURCES & DIGITAL LIBRARY (مصادر الدراسة والمكتبة الرقمية) */}
+          {activeTab === 'study_resources' && (
+            <StudyResourcesManager
+              subjectsList={subjects}
+              onNotify={(msg) => {
+                showToast(msg);
+              }}
+            />
           )}
 
           {/* TAB 2: ARTICLES MANAGEMENT */}

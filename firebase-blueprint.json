@@ -69,6 +69,29 @@
         "details": { "type": "string", "description": "Details of change" },
         "timestamp": { "type": "string", "description": "ISO timestamp" }
       }
+    },
+    "study_resources": {
+      "title": "Study Resources & Digital Library",
+      "description": "Dynamic digital library resources, study references, external books and materials",
+      "properties": {
+        "title": { "type": "string", "description": "Source title (Arabic/English)" },
+        "description": { "type": "string", "description": "Source description" },
+        "url": { "type": "string", "description": "Source destination external URL" },
+        "link": { "type": "string", "description": "Source URL link" },
+        "subjectId": { "type": "string", "description": "Associated subject identifier or general" },
+        "subjectTag": { "type": "string", "description": "Subject tag label" },
+        "category": { "type": "string", "description": "Category: book, video, telegram, notes, summary" },
+        "isActive": { "type": "boolean", "description": "Visibility flag" },
+        "order": { "type": "number", "description": "Display order" },
+        "createdAt": { "type": "string", "description": "Creation ISO timestamp" },
+        "updatedAt": { "type": "string", "description": "Last update ISO timestamp" }
+      }
+    }
+  },
+  "firestore": {
+    "/study_resources/{resourceId}": {
+      "schema": "study_resources",
+      "description": "Collection of academic study sources and digital library cards"
     }
   }
 }
