@@ -1,0 +1,99 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isValidString(val, minLen, maxLen) {
+      return val is string && val.size() >= minLen && val.size() <= maxLen;
+    }
+
+    function isAdmin() {
+      return request.auth != null;
+    }
+
+    // Site Configuration (General Settings, Ticker, Titles, Toggles)
+    match /site_config/{configId} {
+      allow read, write: if true;
+    }
+
+    // Articles
+    match /articles/{articleId} {
+      allow read: if true;
+      allow create, update: if isAdmin() || (
+        isValidString(request.resource.data.title, 2, 300) &&
+        request.resource.data.content is string
+      );
+      allow delete: if isAdmin() || articleId != 'permanent_system_article';
+    }
+
+    // Educational Videos
+    match /videos/{videoId} {
+      allow read: if true;
+      allow create, update: if isAdmin() || (
+        isValidString(request.resource.data.title, 2, 300) &&
+        request.resource.data.url is string
+      );
+      allow delete: if isAdmin() || videoId != 'permanent_system_video';
+    }
+
+    // Subjects and Academics
+    match /subjects_data/{subjectId} {
+      allow read: if true;
+      allow create, update: if isAdmin() || (
+        isValidString(request.resource.data.nameAr, 2, 200)
+      );
+      allow delete: if isAdmin() || true;
+    }
+
+    // Announcements
+    match /announcements/{annId} {
+      allow read: if true;
+      allow create, update: if isAdmin() || (
+        isValidString(request.resource.data.title, 2, 300)
+      );
+      allow delete: if true;
+    }
+
+    // Media Files
+    match /media/{mediaId} {
+      allow read: if true;
+      allow create, update: if isAdmin() || (
+        isValidString(request.resource.data.name, 1, 300) &&
+        request.resource.data.url is string
+      );
+      allow delete: if true;
+    }
+
+    // News Ticker Items
+    match /ticker_items/{tickerId} {
+      allow read: if true;
+      allow create, update: if isAdmin() || (
+        isValidString(request.resource.data.text, 2, 500)
+      );
+      allow delete: if true;
+    }
+
+    // Google Drive Educational Assets Metadata
+    match /drive_files/{fileId} {
+      allow read: if true;
+      allow create, update: if isAdmin() || (
+        isValidString(request.resource.data.name, 1, 300) &&
+        request.resource.data.fileId is string
+      );
+      allow delete: if true;
+    }
+
+    // Admin Action Logs (Append-only for tamper prevention)
+    match /admin_logs/{logId} {
+      allow read: if isAdmin();
+      allow create: if request.resource.data.action is string &&
+                       request.resource.data.timestamp is string;
+      allow update, delete: if false;
+    }
+
+    // Deny all other collections by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

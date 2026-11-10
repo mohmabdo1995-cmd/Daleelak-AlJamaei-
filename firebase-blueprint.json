@@ -1,0 +1,74 @@
+{
+  "entities": {
+    "site_config": {
+      "title": "Site Configuration",
+      "description": "Global website settings, text content, section visibility, and theme colors",
+      "properties": {
+        "heroTitle": { "type": "string", "description": "Hero section title" },
+        "heroSubtitle": { "type": "string", "description": "Hero section subtitle" },
+        "heroButtonText": { "type": "string", "description": "Hero button text" },
+        "heroButtonLink": { "type": "string", "description": "Hero button link" },
+        "telegramBotLink": { "type": "string", "description": "Telegram bot URL" },
+        "telegramBotName": { "type": "string", "description": "Telegram bot username" },
+        "footerText": { "type": "string", "description": "Footer copyright and overview text" },
+        "contactEmail": { "type": "string", "description": "Contact email" },
+        "contactPhone": { "type": "string", "description": "Contact phone number" },
+        "contactAddress": { "type": "string", "description": "College address" },
+        "siteLogoUrl": { "type": "string", "description": "Custom logo URL" },
+        "primaryColor": { "type": "string", "description": "Primary theme accent color" },
+        "seoTitle": { "type": "string", "description": "SEO page title" },
+        "seoDescription": { "type": "string", "description": "SEO meta description" },
+        "sectionVisibility": {
+          "type": "object",
+          "description": "ON/OFF visibility switches for website sections and components"
+        }
+      }
+    },
+    "subjects": {
+      "title": "Academic Subjects",
+      "description": "List of college courses and academic subjects",
+      "properties": {
+        "nameAr": { "type": "string", "description": "Arabic subject name" },
+        "nameEn": { "type": "string", "description": "English subject name" },
+        "code": { "type": "string", "description": "Subject course code" },
+        "credits": { "type": "number", "description": "Credit hours" },
+        "description": { "type": "string", "description": "Short description" },
+        "image": { "type": "string", "description": "Image URL" },
+        "visible": { "type": "boolean", "description": "ON/OFF visibility switch" }
+      }
+    },
+    "announcements": {
+      "title": "Announcements & Ads",
+      "description": "Website news, announcements and advertisement banners",
+      "properties": {
+        "title": { "type": "string", "description": "Announcement title" },
+        "content": { "type": "string", "description": "Announcement text content" },
+        "badge": { "type": "string", "description": "Badge label e.g. هام / جديد" },
+        "link": { "type": "string", "description": "External action link" },
+        "visible": { "type": "boolean", "description": "ON/OFF visibility switch" },
+        "createdAt": { "type": "string", "description": "Timestamp" }
+      }
+    },
+    "media": {
+      "title": "Media Files & Assets",
+      "description": "Uploaded logos, images, PDFs, videos, and backgrounds",
+      "properties": {
+        "name": { "type": "string", "description": "Media item name" },
+        "url": { "type": "string", "description": "Direct file or image URL" },
+        "type": { "type": "string", "description": "image | pdf | video | logo" },
+        "size": { "type": "string", "description": "File size label" },
+        "visible": { "type": "boolean", "description": "ON/OFF visibility switch" },
+        "createdAt": { "type": "string", "description": "Timestamp" }
+      }
+    },
+    "admin_logs": {
+      "title": "Admin Action Logs",
+      "description": "History of admin edits and settings changes",
+      "properties": {
+        "action": { "type": "string", "description": "Action performed" },
+        "details": { "type": "string", "description": "Details of change" },
+        "timestamp": { "type": "string", "description": "ISO timestamp" }
+      }
+    }
+  }
+}

@@ -1,0 +1,220 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Montserrat Arabic Font Family Definition
+   Full 9-weight typographical system supporting Arabic and English
+   Local high-speed offline WOFF2 + Global CDN Fallback
+   ========================================================================== */
+
+/* 100 - Thin */
+@font-face {
+  font-family: 'Montserrat Arabic';
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+  src: local('Montserrat Arabic Thin'), local('Montserrat-Arabic-Thin'),
+       url('/fonts/montserrat-arabic/Montserrat-Arabic-Thin.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/typeagm/Montserrat-Arabic@master/fonts/WEB/Montserrat-Arabic-Thin.woff2') format('woff2');
+}
+
+/* 200 - ExtraLight */
+@font-face {
+  font-family: 'Montserrat Arabic';
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: local('Montserrat Arabic ExtraLight'), local('Montserrat-Arabic-ExtraLight'),
+       url('/fonts/montserrat-arabic/Montserrat-Arabic-ExtraLight.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/typeagm/Montserrat-Arabic@master/fonts/WEB/Montserrat-Arabic-ExtraLight.woff2') format('woff2');
+}
+
+/* 300 - Light */
+@font-face {
+  font-family: 'Montserrat Arabic';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: local('Montserrat Arabic Light'), local('Montserrat-Arabic-Light'),
+       url('/fonts/montserrat-arabic/Montserrat-Arabic-Light.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/typeagm/Montserrat-Arabic@master/fonts/WEB/Montserrat-Arabic-Light.woff2') format('woff2');
+}
+
+/* 400 - Regular */
+@font-face {
+  font-family: 'Montserrat Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Montserrat Arabic Regular'), local('Montserrat-Arabic-Regular'),
+       url('/fonts/montserrat-arabic/Montserrat-Arabic-Regular.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/typeagm/Montserrat-Arabic@master/fonts/WEB/Montserrat-Arabic-Regular.woff2') format('woff2');
+}
+
+/* 500 - Medium */
+@font-face {
+  font-family: 'Montserrat Arabic';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: local('Montserrat Arabic Medium'), local('Montserrat-Arabic-Medium'),
+       url('/fonts/montserrat-arabic/Montserrat-Arabic-Medium.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/typeagm/Montserrat-Arabic@master/fonts/WEB/Montserrat-Arabic-Medium.woff2') format('woff2');
+}
+
+/* 600 - SemiBold */
+@font-face {
+  font-family: 'Montserrat Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Montserrat Arabic SemiBold'), local('Montserrat-Arabic-SemiBold'),
+       url('/fonts/montserrat-arabic/Montserrat-Arabic-SemiBold.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/typeagm/Montserrat-Arabic@master/fonts/WEB/Montserrat-Arabic-SemiBold.woff2') format('woff2');
+}
+
+/* 700 - Bold */
+@font-face {
+  font-family: 'Montserrat Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Montserrat Arabic Bold'), local('Montserrat-Arabic-Bold'),
+       url('/fonts/montserrat-arabic/Montserrat-Arabic-Bold.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/typeagm/Montserrat-Arabic@master/fonts/WEB/Montserrat-Arabic-Bold.woff2') format('woff2');
+}
+
+/* 800 - ExtraBold */
+@font-face {
+  font-family: 'Montserrat Arabic';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Montserrat Arabic ExtraBold'), local('Montserrat-Arabic-ExtraBold'),
+       url('/fonts/montserrat-arabic/Montserrat-Arabic-ExtraBold.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/typeagm/Montserrat-Arabic@master/fonts/WEB/Montserrat-Arabic-ExtraBold.woff2') format('woff2');
+}
+
+/* 900 - Black */
+@font-face {
+  font-family: 'Montserrat Arabic';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: local('Montserrat Arabic Black'), local('Montserrat-Arabic-Black'),
+       url('/fonts/montserrat-arabic/Montserrat-Arabic-Black.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/typeagm/Montserrat-Arabic@master/fonts/WEB/Montserrat-Arabic-Black.woff2') format('woff2');
+}
+
+@theme {
+  --color-navy: #071A3D;
+  --color-teal-dark: #16958E;
+  --color-sky-soft: #BCEBFF;
+  --color-pure-white: #FFFFFF;
+
+  --font-montserrat: 'Montserrat Arabic', 'Montserrat-Arabic', 'Montserrat', 'Alexandria', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Montserrat Arabic', 'Montserrat-Arabic', 'Montserrat', 'Alexandria', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-tajawal: 'Montserrat Arabic', 'Montserrat-Arabic', 'Montserrat', 'Alexandria', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-cairo: 'Montserrat Arabic', 'Montserrat-Arabic', 'Montserrat', 'Alexandria', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+:root {
+  --primary-navy: #071A3D;
+  --primary-teal: #16958E;
+  --secondary-sky: #BCEBFF;
+  --secondary-white: #FFFFFF;
+  font-family: 'Montserrat Arabic', 'Montserrat-Arabic', 'Montserrat', 'Alexandria', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@layer base {
+  html, body {
+    font-family: 'Montserrat Arabic', 'Montserrat-Arabic', 'Montserrat', 'Alexandria', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #FFFFFF;
+    color: #071A3D;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Universal typography inheritance */
+  input, button, select, textarea, h1, h2, h3, h4, h5, h6, p, span, a, label {
+    font-family: 'Montserrat Arabic', 'Montserrat-Arabic', 'Montserrat', 'Alexandria', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Ensure all font classes route to Montserrat Arabic */
+.font-montserrat,
+.font-tajawal,
+.font-cairo,
+.font-sans {
+  font-family: 'Montserrat Arabic', 'Montserrat-Arabic', 'Montserrat', 'Alexandria', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* Custom Glassmorphism */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(188, 235, 255, 0.6);
+}
+
+.dark .glass-panel {
+  background: rgba(7, 26, 61, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(22, 149, 142, 0.25);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #16958E;
+  opacity: 0.4;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #071A3D;
+}
+
+/* Subtle Grid Pattern */
+.bg-grid-pattern {
+  background-size: 30px 30px;
+  background-image: 
+    linear-gradient(to right, rgba(22, 149, 142, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(22, 149, 142, 0.05) 1px, transparent 1px);
+}
+
+.dark .bg-grid-pattern {
+  background-size: 30px 30px;
+  background-image: 
+    linear-gradient(to right, rgba(188, 235, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(188, 235, 255, 0.04) 1px, transparent 1px);
+}
+
+/* Continuous News Ticker Marquee Animation */
+@keyframes newsTickerScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-ticker {
+  display: flex;
+  width: max-content;
+  animation: newsTickerScroll var(--ticker-duration, 18s) linear infinite;
+  will-change: transform;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}

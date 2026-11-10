@@ -1,0 +1,6 @@
+{
+  "name": "دليلك الجامعي",
+  "description": "جامعتك في جيبك - دليل رقمي شامل للطلاب الجامعيين لتنظيم الدراسة، الجداول الدراسية، والتذكيرات الذكية",
+  "requestFramePermissions": ["notifications"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
